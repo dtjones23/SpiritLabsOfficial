@@ -9,6 +9,7 @@ const fakeTopDrinks = [
 const fakeDrinkOfTheDay = {
   name: "Espresso Martini",
   description: "A rich and smooth coffee-infused cocktail.",
+  image: "https://www.thecocktaildb.com/images/media/drink/lyloe91487602877.jpg"
 };
 
 export default function Home() {
@@ -41,6 +42,11 @@ export default function Home() {
           <DrinkCard
             name={fakeDrinkOfTheDay.name}
             description={fakeDrinkOfTheDay.description}
+          />
+          <img
+            src={fakeDrinkOfTheDay.image}
+            alt="drink-of-the-day"
+            className="mx-auto w-4/5"
           />
         </Section>
       </div>
