@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PersonIcon from '@mui/icons-material/Person';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 
 const fakeFavorites = [
