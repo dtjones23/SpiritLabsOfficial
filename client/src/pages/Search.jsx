@@ -1,22 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ArrowLeftOutlinedIcon from '@mui/icons-material/ArrowLeftOutlined';
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-
-const alcoholTypes = ["Absinthe", "Amaretto", "Apple Brandy", "Apricot Brandy", "Baileys Irish Cream", "Bénédictine", "Blackberry Liqueur", 
-  "Blue Curaçao", "Brandy", "Calvados", "Campari", "Chambord", "Cherry Brandy", "Cherry Heering", "Citron Vodka", "Coconut Rum", "Coffee Liqueur", "Cointreau", 
-  "Crème de Cassis", "Crème de Cacao", "Crème de Menthe", "Crème de Violette", "Damiana Liqueur", "Dark Rum", "Drambuie", 
-  "Frangelico", "Galliano", "Gin", "Gold Rum", "Gold Tequila", "Grand Marnier", "Green Chartreuse", "Irish Cream Liqueur", 
-  "Kahlúa", "Lillet Blanc", "Light Rum", "Lychee Liqueur", "Mandarine Napoleon", "Maraschino Liqueur", "Mezcal", "Midori", 
-  "Orange Curaçao", "Orange Liqueur", "Overproof Rum", "Peach Schnapps", "Peppermint Schnapps", "Pepper Tequila", "Pernod", "Reposado Tequila", "Ruby Port", "Silver Tequila", 
-  "Sloe Gin", "Southern Comfort", "Strawberry Liqueur", "Sweet Vermouth", "Tequila", "Tia Maria", "Triple Sec", "Tuaca", 
-  "Vanilla Vodka", "Vermouth", "Vodka", "Whiskey"];
-const mixers = ["Angostura Bitters", "Bitters", "Champagne", "Club Soda", "Cinnamon Syrup", "Coconut Cream",
-  "Cold Espresso", "Cola", "Cranberry Juice", "Cream", "Dry Vermouth", "Egg White", 
-  "Espresso", "Ginger Ale", "Ginger Beer", "Grapefruit Juice", "Grenadine", "Half-and-Half", "Heavy Cream", "Honey Syrup", "Hot Coffee", "Lemon Juice", 
-  "Lemon-Lime Soda", "Lime Juice", "Lychee Juice", "Maraschino Cherry Juice", "Orange Juice", "Peychauds Bitters", "Pineapple Juice", 
-  "Prickly Pear Juice", "Red Bull", "Simple Syrup", "Sweet and Sour Mix", 
-  "Tangerine Juice", "Tomato Juice", "Tonic Water"];
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import { useQuery } from "@apollo/client";
+import { useNavigate } from 'react-router-dom';
+import { GET_COCKTAILS } from "../utils/queries";
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,24 +14,82 @@ export default function Search() {
   const [showMixersDropdown, setShowMixersDropdown] = useState(false);
   const [alcoholSearchTerm, setAlcoholSearchTerm] = useState("");
   const [mixerSearchTerm, setMixerSearchTerm] = useState("");
+  const [alcoholIngredients, setAlcoholIngredients] = useState([]);
+  const [mixerIngredients, setMixerIngredients] = useState([]);
+  const [cocktails, setCocktails] = useState([]);
+  const navigate = useNavigate();
+  
+  const { loading, error, data } = useQuery(GET_COCKTAILS);
+
+  useEffect(() => {
+    if (!loading && data) {
+      const formulaArray = data.getCocktails;
+
+      const alcoholList = formulaArray.flatMap((formula) =>
+        formula.ingredients.alcohol.map((ingredient) => ingredient.name)
+      );
+
+      const mixerList = formulaArray.flatMap((formula) =>
+        formula.ingredients.mixers.map((ingredient) => ingredient.name)
+      );
+
+      setAlcoholIngredients([...new Set(alcoholList)]);
+      setMixerIngredients([...new Set(mixerList)]);
+    }
+  }, [loading, data]);
+
+  useEffect(() => {
+    if (data?.getCocktails) {
+      let filteredCocktails = data.getCocktails;
+  
+      // Filter by search term (drink name)
+      if (searchTerm) {
+        filteredCocktails = filteredCocktails.filter((formula) =>
+          formula.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+    // console.log(data.getCocktails);
+      // Limit results
+      setCocktails(filteredCocktails.slice(0, 6));
+    } else {
+      setCocktails([]);
+    }
+    
+  }, [searchTerm, selectedAlcohol, selectedMixers, data]);
+
+  const filteredAlcoholTypes = alcoholIngredients.filter((type) =>
+    type.toLowerCase().includes(alcoholSearchTerm.toLowerCase())
+  );
+
+  const filteredMixers = mixerIngredients.filter((mixer) =>
+    mixer.toLowerCase().includes(mixerSearchTerm.toLowerCase())
+  );
 
   const handleSelect = (item, type) => {
     if (type === "alcohol") {
-      setSelectedAlcohol(selectedAlcohol.includes(item)
-        ? selectedAlcohol.filter((i) => i !== item)
-        : [...selectedAlcohol, item]);
-    } else {
-      setSelectedMixers(selectedMixers.includes(item)
-        ? selectedMixers.filter((i) => i !== item)
-        : [...selectedMixers, item]);
+      setSelectedAlcohol((prev) =>
+        prev.includes(item) ? prev : [...prev, item]
+      );
+    } else if (type === "mixer") {
+      setSelectedMixers((prev) => (prev.includes(item) ? prev : [...prev, item]));
     }
+  };
+
+  const handleSearch = () => {
+    // Redirect to the Results page with selected filters
+    navigate('/results', {
+      state: {
+        selectedAlcohol,
+        selectedMixers,
+      },
+    });
   };
 
   const removeFilter = (item, type) => {
     if (type === "alcohol") {
-      setSelectedAlcohol(selectedAlcohol.filter((i) => i !== item));
-    } else {
-      setSelectedMixers(selectedMixers.filter((i) => i !== item));
+      setSelectedAlcohol((prev) => prev.filter((alcohol) => alcohol !== item));
+    } else if (type === "mixer") {
+      setSelectedMixers((prev) => prev.filter((mixer) => mixer !== item));
     }
   };
 
@@ -53,36 +99,64 @@ export default function Search() {
     setSearchTerm("");
   };
 
-  const filteredAlcoholTypes = alcoholTypes.filter((type) =>
-    type.toLowerCase().includes(alcoholSearchTerm.toLowerCase())
-  );
-
-  const filteredMixers = mixers.filter((mixer) =>
-    mixer.toLowerCase().includes(mixerSearchTerm.toLowerCase())
-  );
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="p-10">
       <h1 className="text-3xl font-semibold text-center mb-6">Search Drinks</h1>
+      
+      {/* Search Input */}
       <div className="flex justify-center">
         <input
-          type="text"
-          placeholder="Search drinks by name..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-4/5 p-2 border rounded-lg"
+        type="text"
+        placeholder="Search drinks by name..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-4/5 p-2 border rounded-lg"
         />
       </div>
-
+    
+      {/* Live Search Results */}
+      {searchTerm && (
+        <div className="mt-4 max-h-60 overflow-y-auto rounded-lg p-4 shadow-lg bg-white">
+          {cocktails.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {cocktails.map((drink) => (
+                <div
+                  key={drink.id}
+                  onClick={() => navigate(`/description/${drink.id}`)}
+                  className="border rounded-lg flex flex-col items-center cursor-pointer hover:shadow-2xl transition-shadow bg-gray-100 p-2"
+                >
+                  <img
+                    src={drink.image}
+                    alt={drink.name}
+                    className="w-32 h-32 object-cover rounded-full mb-3"
+                  />
+                  <h3 className="text-lg font-semibold text-center text-gray-800">
+                    {drink.name}
+                  </h3>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-500">No drinks found.</p>
+          )}
+        </div>
+      )}
       <div className="flex space-x-4 mt-4 justify-center">
         {/* Alcohol Selection */}
-        <div className="relative">
+        <div className="relative w-1/3">
           <button
             onClick={() => setShowAlcoholDropdown(!showAlcoholDropdown)}
-            className="bg-gray-800 text-white flex items-center justify-between px-10 py-3 text-lg rounded-lg w-full cursor-pointer"
+            className="bg-gray-800 text-white flex items-center justify-between px-6 py-3 text-lg rounded-lg w-full cursor-pointer hover:scale-105"
           >
             Select Alcohol(s)
-            {showAlcoholDropdown ? <ArrowDropDownOutlinedIcon className="ml-2" /> : <ArrowLeftOutlinedIcon className="ml-2" />}
+            {showAlcoholDropdown ? (
+              <ArrowDropDownOutlinedIcon className="ml-2" />
+            ) : (
+              <ArrowLeftOutlinedIcon className="ml-2" />
+            )}
           </button>
           {showAlcoholDropdown && (
             <DropdownList
@@ -94,15 +168,19 @@ export default function Search() {
             />
           )}
         </div>
-
+    
         {/* Mixer Selection */}
-        <div className="relative">
+        <div className="relative w-1/3">
           <button
             onClick={() => setShowMixersDropdown(!showMixersDropdown)}
-            className="bg-gray-800 text-white flex items-center justify-between px-10 py-3 text-lg rounded-lg cursor-pointer"
+            className="bg-gray-800 text-white flex items-center justify-between px-6 py-3 text-lg rounded-lg w-full cursor-pointer hover:scale-105"
           >
             Select Mixer(s)
-            {showMixersDropdown ? <ArrowDropDownOutlinedIcon className="ml-2" /> : <ArrowLeftOutlinedIcon className="ml-2" />}
+            {showMixersDropdown ? (
+              <ArrowDropDownOutlinedIcon className="ml-2" />
+            ) : (
+              <ArrowLeftOutlinedIcon className="ml-2" />
+            )}
           </button>
           {showMixersDropdown && (
             <DropdownList
@@ -115,28 +193,36 @@ export default function Search() {
           )}
         </div>
       </div>
-
+    
       {/* Selected Filters */}
-        <div className="mt-4 bg-gray-200 p-4 rounded-lg ">
-          <h3 className="font-semibold mb-2 text-center">Selected Filters:</h3>
-          <div className="flex flex-wrap gap-2">
-            {selectedAlcohol.map((item) => (
-              <FilterTag key={item} item={item} type="alcohol" removeFilter={removeFilter} />
-            ))}
-            {selectedMixers.map((item) => (
-              <FilterTag key={item} item={item} type="mixer" removeFilter={removeFilter} />
-            ))}
-          </div>
+      <div className="mt-4 bg-gray-200 p-4 rounded-lg">
+        <h3 className="font-semibold mb-2 text-center">Selected Filters:</h3>
+        <div className="flex flex-wrap gap-2">
+          {selectedAlcohol.map((item) => (
+            <FilterTag key={item} item={item} type="alcohol" removeFilter={removeFilter} />
+          ))}
+          {selectedMixers.map((item) => (
+            <FilterTag key={item} item={item} type="mixer" removeFilter={removeFilter} />
+          ))}
         </div>
-
+      </div>
+    
       {/* Search & Clear Buttons */}
       <div className="mt-4 flex space-x-4 justify-center">
-        <button className="bg-blue-600 text-white px-6 py-2 rounded-lg">Search Drinks</button>
-        <button onClick={clearFilters} className="bg-red-600 text-white px-6 py-2 rounded-lg">Clear Selection</button>
+        <button
+          onClick={handleSearch}
+          className="bg-blue-600 text-white px-6 py-2 rounded-lg cursor-pointer hover:scale-120"
+        >
+          Search Drinks
+        </button>
+        <button onClick={clearFilters} className="bg-red-600 text-white px-6 py-2 rounded-lg cursor-pointer hover:scale-120">
+          Clear Selection
+        </button>
       </div>
     </div>
   );
 }
+
 
 // Dropdown List Component
 const DropdownList = ({ searchTerm, setSearchTerm, items, selectedItems, handleSelect }) => (
@@ -174,6 +260,6 @@ const DropdownList = ({ searchTerm, setSearchTerm, items, selectedItems, handleS
 const FilterTag = ({ item, type, removeFilter }) => (
   <div className="flex items-center bg-gray-800 text-white px-3 py-1 rounded-full">
     {item}
-    <button onClick={() => removeFilter(item, type)} className="ml-2 text-red-400">✕</button>
+    <button onClick={() => removeFilter(item, type)} className="ml-2 text-red-400 cursor-pointer">✕</button>
   </div>
 );

@@ -1,0 +1,290 @@
+[
+  {
+    "name": "Old Fashioned",
+    "image": "./images/old-fashioned.webp",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Bourbon", "amount": "2 oz" }
+      ],
+      "mixers": [
+        { "name": "Angostura Bitters", "amount": "2 dashes" },
+        { "name": "Club Soda", "amount": "2 oz" },
+        { "name": "Sugar", "amount": "2 tsp" }
+      ],
+      "garnishes": [
+        { "name": "Orange Peel", "amount": "1" },
+        { "name": "Cherry", "amount": "1" },
+        { "name": "Lemon Zest", "amount": "1 twist" }
+      ]
+    },
+    "assembly": "Muddle sugar and bitters in a glass. Fill with ice, add whiskey, stir, and top with club soda if desired. Garnish with orange peel, cherry, and lemon zest."
+  },
+  {
+    "name": "Whiskey Sour",
+    "image": "./images/whiskeysour.png",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Whiskey", "amount": "2 oz" }
+      ],
+      "mixers": [
+        { "name": "Lemon Juice", "amount": "3/4 oz" },
+        { "name": "Simple Syrup", "amount": "3/4 oz" }
+      ],
+      "garnishes": [
+        { "name": "Cherry", "amount": "1" },
+        { "name": "Lemon Wheel", "amount": "1" }
+      ]
+    },
+    "assembly": "Shake whiskey, lemon juice, and simple syrup with ice. Strain into a glass over ice and garnish with a cherry and lemon wheel."
+  },
+  {
+    "name": "Cosmopolitan",
+    "image": "./images/cosmopolitan.png",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Vodka", "amount": "1 1/2 oz" },
+        { "name": "Triple Sec", "amount": "1/2 oz" }
+      ],
+      "mixers": [
+        { "name": "Lime Juice", "amount": "1/2 oz" },
+        { "name": "Cranberry Juice", "amount": "1 oz" }
+      ],
+      "garnishes": [
+        { "name": "Lime Wheel", "amount": "1" }
+      ]
+    },
+    "assembly": "Shake all ingredients with ice. Strain into a martini glass and garnish with a lime wheel."
+  },
+  {
+    "name": "Moscow Mule",
+    "image": "./images/moscowmule.png",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Vodka", "amount": "2 oz" }
+      ],
+      "mixers": [
+        { "name": "Lime Juice", "amount": "1/2 oz" },
+        { "name": "Ginger Beer", "amount": "3 oz" }
+      ],
+      "garnishes": [
+        { "name": "Lime Wheel", "amount": "1" }
+      ]
+    },
+    "assembly": "Combine vodka and lime juice in a copper mug filled with ice. Top with ginger beer, stir, and garnish with a lime wheel."
+  },
+  {
+    "name": "Screwdriver",
+    "image": "./images/screwdriver.png",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Vodka", "amount": "1 1/2 oz" }
+      ],
+      "mixers": [
+        { "name": "Orange Juice", "amount": "3 oz" }
+      ],
+      "garnishes": [
+        { "name": "Orange Slice", "amount": "1" }
+      ]
+    },
+    "assembly": "Pour vodka and orange juice into a glass filled with ice. Stir well and garnish with an orange slice."
+  },
+  {
+    "name": "Long Island Iced Tea",
+    "image": "./images/longislandicedtea.png",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Vodka", "amount": "1/2 oz" },
+        { "name": "Gin", "amount": "1/2 oz" },
+        { "name": "Rum", "amount": "1/2 oz" },
+        { "name": "Tequila", "amount": "1/2 oz" },
+        { "name": "Triple Sec", "amount": "1/2 oz" }
+      ],
+      "mixers": [
+        { "name": "Lemon Juice", "amount": "1 oz" },
+        { "name": "Simple Syrup", "amount": "1 oz" },
+        { "name": "Cola", "amount": "1 oz" }
+      ],
+      "garnishes": [
+        { "name": "Lemon Wedge", "amount": "1" }
+      ]
+    },
+    "assembly": "Combine all ingredients in a shaker with ice. Shake well and strain into a glass filled with ice. Garnish with a lemon wedge."
+  },
+  {
+    "name": "Mai Tai",
+    "image": "./images/maitai.png",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Light Rum", "amount": "1 oz" },
+        { "name": "Dark Rum", "amount": "1 oz" },
+        { "name": "Orange Curacao", "amount": "1/2 oz" }
+      ],
+      "mixers": [
+        { "name": "Lime Juice", "amount": "1 oz" },
+        { "name": "Orgeat Syrup", "amount": "1/2 oz" }
+      ],
+      "garnishes": [
+        { "name": "Mint Sprig", "amount": "1" },
+        { "name": "Pineapple Slice", "amount": "1" },
+        { "name": "Cherry", "amount": "1" }
+      ]
+    },
+    "assembly": "Shake all ingredients with ice. Strain into a glass filled with crushed ice. Garnish with mint sprig, pineapple slice, and cherry."
+  },
+  {
+    "name": "Piña Colada",
+    "image": "./images/piñacolada.png",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Light Rum", "amount": "2 oz" }
+      ],
+      "mixers": [
+        { "name": "Coconut Cream", "amount": "1 oz" },
+        { "name": "Pineapple Juice", "amount": "1 oz" }
+      ],
+      "garnishes": [
+        { "name": "Pineapple Wedge", "amount": "1" },
+        { "name": "Cherry", "amount": "1" }
+      ]
+    },
+    "assembly": "Blend all ingredients with ice until smooth. Pour into a hurricane glass and garnish with pineapple wedge and cherry."
+  },
+  {
+    "name": "Sazerac",
+    "image": "./images/sazerac.png",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Rye Whiskey", "amount": "2 oz" }
+      ],
+      "mixers": [
+        { "name": "Sugar Cube", "amount": "1" },
+        { "name": "Peychaud's Bitters", "amount": "2 dashes" },
+        { "name": "Absinthe", "amount": "1/4 oz" }
+      ],
+      "garnishes": [
+        { "name": "Lemon Peel", "amount": "1 twist" }
+      ]
+    },
+    "assembly": "Rinse a chilled glass with absinthe and discard excess. Muddle sugar and bitters in a separate glass. Add rye whiskey and ice, stir, and strain into the prepared glass. Garnish with lemon peel."
+  },
+  {
+    "name": "Sex on the Beach",
+    "image": "./images/sexonthebeach.webp",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Vodka", "amount": "1 1/2 oz" },
+        { "name": "Peach Schnapps", "amount": "1/2 oz" }
+      ],
+      "mixers": [
+        { "name": "Cranberry Juice", "amount": "1 1/2 oz" },
+        { "name": "Orange Juice", "amount": "1 1/2 oz" }
+      ],
+      "garnishes": [
+        { "name": "Orange Slice", "amount": "1" },
+        { "name": "Cherry", "amount": "1" }
+      ]
+    },
+    "assembly": "Fill a highball glass with ice, pour in vodka, peach schnapps, cranberry juice, and orange juice. Stir gently."
+  },
+  {
+    "name": "Vampiro",
+    "image": "./images/vampiro.png",
+    "ingredients": {
+      "alcohol": [
+        { "name": "Silver Tequila", "amount": "2 oz" }
+      ],
+      "mixers": [
+        { "name": "Tomato Juice", "amount": "2 oz" },
+        { "name": "Orange Juice", "amount": "1 oz" },
+        { "name": "Honey", "amount": "1 teaspoon" },
+        { "name": "Lime Juice", "amount": "1 oz" },
+        { "name": "Chili-Lime Seasoning", "amount": "2 dashes" },
+        { "name": "Hot Sauce", "amount": "2 dashes" }
+      ],
+      "garnishes": [
+        { "name": "Lime Wedge", "amount": "1" }
+      ]
+    },
+    "assembly": "Combine all ingredients in a shaker with ice. Shake well and strain into a highballglass filled with ice. Garnish with lime wedge."
+  }
+  ,
+    {
+      "name": "Bloody Mary",
+      "image": "./images/bloodymary.png",
+      "ingredients": {
+        "alcohol": [
+          { "name": "Vodka", "amount": "2 oz" }
+        ],
+        "mixers": [
+          { "name": "Tomato Juice", "amount": "4 oz" },
+          { "name": "Lemon Juice", "amount": "1/2 oz" },
+          { "name": "Worcestershire Sauce", "amount": "2 dashes" },
+          { "name": "Hot Sauce", "amount": "2 dashes" },
+          { "name": "Celery Salt", "amount": "1 pinch" },
+          { "name": "Black Pepper", "amount": "1 pinch" }
+        ],
+        "garnishes": [
+          { "name": "Celery Stick", "amount": "1" },
+          { "name": "Lemon Wedge", "amount": "1" }
+        ]
+      },
+      "assembly": "Combine all ingredients in a shaker with ice. Shake gently and strain into a glass filled with ice. Garnish with celery stick and lemon wedge."
+    },
+    {
+      "name": "Bloody Maria",
+      "image": "./images/bloodymaria.png",
+      "ingredients": {
+        "alcohol": [
+          { "name": "Silver Tequila", "amount": "2 oz" }
+        ],
+        "mixers": [
+          { "name": "Tomato Juice", "amount": "4 oz" },
+          { "name": "Lemon Juice", "amount": "1/2 oz" },
+          { "name": "Worcestershire Sauce", "amount": "2 dashes" },
+          { "name": "Hot Sauce", "amount": "2 dashes" },
+          { "name": "Celery Salt", "amount": "1 pinch" },
+          { "name": "Black Pepper", "amount": "1 pinch" }
+        ],
+        "garnishes": [
+          { "name": "Celery Stick", "amount": "1" },
+          { "name": "Lime Wedge", "amount": "1" }
+        ]
+      },
+      "assembly": "Combine all ingredients in a shaker with ice. Shake gently and strain into a glass filled with ice. Garnish with celery stick and lime wedge."
+    },
+    {
+      "name": "Bird of Paradise",
+      "image": "./images/birdofparadise.png",
+      "ingredients": {
+        "alcohol": [
+          { "name": "Tequila", "amount": "3/4 oz" },
+          { "name": "Amaretto", "amount": "1/4 oz" },
+          { "name": "White Crème de Cacao", "amount": "3/4 oz" }
+        ],
+        "mixers": [
+          { "name": "Heavy Cream", "amount": "1 1/2 oz" }
+        ],
+        "garnishes": []
+      },
+      "assembly": "Shake all ingredients with ice. Strain into a glass filled with ice. Garnish with pineapple wedge and cherry."
+    },
+    {
+      "name": "Blue Hawaii",
+      "image": "./images/bluehawaii.webp",
+      "ingredients": {
+        "alcohol": [
+          { "name": "Light Rum", "amount": "3/4 oz" },
+          { "name": "Blue Curaçao", "amount": "3/4 oz" }
+        ],
+        "mixers": [
+          { "name": "Pineapple Juice", "amount": "2 oz" },
+          { "name": "Sweet and Sour Mix", "amount": "1 oz" }
+        ],
+        "garnishes": [
+          { "name": "Pineapple Wedge", "amount": "1" },
+          { "name": "Cherry", "amount": "1" }
+        ]
+      },
+      "assembly": "Shake all ingredients with ice. Strain into a glass filled with ice. Garnish with pineapple wedge and cherry."
+    }
+]

@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
+import ExploreIcon from '@mui/icons-material/Explore';
 
 // Navbar component
 const Navbar = () => {
@@ -11,6 +12,7 @@ return (
             <NavItem to="/" label="Home" icon={<HomeIcon style={{ fontSize: 40 }} />} />
             <NavItem to="/search" label="Search" icon={<SearchIcon style={{ fontSize: 40 }} />} />
             <NavItem to="/profile" label="Profile" icon={<PersonIcon style={{ fontSize: 40 }} />} />
+            <NavItem to="/explore" label="Explore" icon={<ExploreIcon style={{ fontSize: 40 }} />} />
         </div>
     </nav>
 );

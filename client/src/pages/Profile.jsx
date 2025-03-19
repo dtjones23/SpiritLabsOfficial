@@ -1,76 +1,112 @@
-import React, { useState } from "react";
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-
-const fakeFavorites = [
-  { id: 1, name: "Margarita", image: "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg" },
-  { id: 2, name: "Old Fashioned", image: "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg" },
-  { id: 3, name: "Mojito", image: "https://www.thecocktaildb.com/images/media/drink/metwgh1606770327.jpg" },
-  { id: 4, name: "Cosmopolitan", image: "https://www.thecocktaildb.com/images/media/drink/kpsajh1504368362.jpg" },
-  { id: 5, name: "Whiskey Sour", image: "https://www.thecocktaildb.com/images/media/drink/hbkfsh1589574990.jpg" },
-  { id: 6, name: "Negroni", image: "https://www.thecocktaildb.com/images/media/drink/0bkwca1612795829.jpg" },
-  { id: 7, name: "Martini", image: "https://www.thecocktaildb.com/images/media/drink/71t8581603821687.jpg" },
-  { id: 8, name: "Pina Colada", image: "https://www.thecocktaildb.com/images/media/drink/cpf4j51504371346.jpg" },
-  { id: 9, name: "Daiquiri", image: "https://www.thecocktaildb.com/images/media/drink/mr30ob1582479875.jpg" },
-  { id: 10, name: "Mai Tai", image: "https://www.thecocktaildb.com/images/media/drink/twyrrp1439907470.jpg" },
-  { id: 11, name: "Bloody Mary", image: "https://www.thecocktaildb.com/images/media/drink/t6caa21582485702.jpg" },
-  { id: 12, name: "Gin and Tonic", image: "https://www.thecocktaildb.com/images/media/drink/uwryxx1483387873.jpg" },
-  { id: 13, name: "Moscow Mule", image: "https://www.thecocktaildb.com/images/media/drink/3pylqc1504370988.jpg" },
-  { id: 14, name: "Screwdriver", image: "https://www.thecocktaildb.com/images/media/drink/8xnyke1504352207.jpg" },
-  { id: 15, name: "Tequila Sunrise", image: "https://www.thecocktaildb.com/images/media/drink/quqyqp1480879103.jpg" },
-  { id: 16, name: "White Russian", image: "https://www.thecocktaildb.com/images/media/drink/vsrupw1472405732.jpg" },
-  { id: 17, name: "Long Island Iced Tea", image: "https://www.thecocktaildb.com/images/media/drink/tppn6i1589574695.jpg" },
-  { id: 18, name: "Mint Julep", image: "https://www.thecocktaildb.com/images/media/drink/sqxsxp1478820236.jpg" },
-  { id: 19, name: "Pisco Sour", image: "https://www.thecocktaildb.com/images/media/drink/tsssur1439907622.jpg" },
-  { id: 20, name: "Singapore Sling", image: "https://www.thecocktaildb.com/images/media/drink/lyloe91487602877.jpg" },
-];
+import React, { useState, useEffect } from "react";
+import { useGlobalContext } from "../GlobalProvider";
+import { useQuery } from '@apollo/client';
+import { GET_USER } from "../utils/queries";
+import { useNavigate } from "react-router-dom";
+import AddToFavorites from "../components/AddToFavorites";
+import AuthModal from "../components/AuthModal";
 
 export default function Profile() {
+  const { loggedIn, username, favorites, userId, logout } = useGlobalContext();
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+  const [authOpen, setAuthOpen] = useState(false);
 
-  const filteredFavorites = fakeFavorites.filter((drink) =>
+  // Fetch the user data using the GET_USER query
+  const { data, loading, error } = useQuery(GET_USER, {
+    variables: { id: userId },
+    skip: !loggedIn,
+  });
+
+  // Display a loading state while fetching data
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
+  // Display the user's favorite drinks
+  const favoriteDrinks = data?.getUser?.favorites || [];
+
+  // Filter favorites based on the search term
+  const filteredFavorites = favoriteDrinks.filter((drink) =>
     drink.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="flex flex-col items-center p-6">
+    <div className="flex flex-col items-center p-3 h-full">
+      {/* Logout Button */}
+      {loggedIn && (
+        <div className="w-full flex justify-end">
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded-lg cursor-pointer"
+            onClick={logout}
+          >
+            Logout
+          </button>
+        </div>
+      )}
+
       {/* Profile Icon */}
       <img
         src="/icon-light.svg"
         alt="logo-image"
-        className="w-1/10 mb-1"
+        className="w-1/10 mb-2"
       />
 
       {/* Search Bar */}
-      <input
-        type="text"
-        placeholder="Search your favorite cocktails..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full max-w-lg p-3 border rounded-lg text-center"
-      />
+      {loggedIn ? (
+        <input
+          type="text"
+          placeholder="Search your favorite cocktails..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full max-w-lg p-3 border rounded-lg text-center mb-6"
+        />
+      ) : (
+        <> 
+        <div className="flex justify-center mb-4">
+          <button 
+            onClick={() => setAuthOpen(true)}
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold cursor-pointer"
+          >
+            Log In / Sign Up
+          </button>
+        </div>
+        <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+        <p className="text-gray-500 text-center mb-6">
+          Sign up or login to save your favorite cocktails.
+        </p>
+        </>
+      )}
 
       {/* Favorites List */}
-      <div className="mt-6 w-full max-w-5xl">
-        <h2 className="text-2xl font-semibold mb-4 text-center">My Favorite Cocktails</h2>
-        <div className="h-150 overflow-auto p-3">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {filteredFavorites.length > 0 ? (
-              filteredFavorites.map((drink) => (
-                <div
-                  key={drink.id}
-                  className="bg-white rounded-lg shadow-md p-3 flex flex-col items-center transition-transform transform hover:scale-105 border"
-                >
-                  <img src={drink.image} alt={drink.name} className="w-24 h-24 rounded-lg mb-2" />
-                  <p className="text-lg font-medium">{drink.name}</p>
-                  <FavoriteBorderOutlinedIcon className="text-red-500 text-2xl mt-2" />
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No favorites found.</p>
-            )}
+      {loggedIn ? (
+        <div className="mt-2 w-full max-w-5xl">
+          <h2 className="text-2xl font-semibold mb-4 text-center">My Favorite Cocktails</h2>
+          <div className="h-[55vh] overflow-auto p-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {filteredFavorites.length > 0 ? (
+                filteredFavorites.map((drink) => (
+                  <button
+                    key={drink.id}
+                    onClick={() => navigate(`/description/${drink.id}`)}
+                    className="bg-white rounded-lg shadow-md p-3 flex flex-col items-center transition-transform transform hover:scale-105 border cursor-pointer"
+                  >
+                    <img
+                      src={drink.image}
+                      alt={drink.name}
+                      className="w-24 h-24 rounded-lg mb-2"
+                    />
+                    <p className="text-lg font-medium">{drink.name}</p>
+                    <AddToFavorites cocktailId={drink.id} />
+                  </button>
+                ))
+              ) : (
+                <p className="text-gray-500">No favorites found.</p>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
+      
     </div>
   );
 }
