@@ -19,7 +19,8 @@ app.use(express.json());
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => ({ req: authMiddleware({ req }) }), // Ensure correct structure
+    context: ({ req }) => ({ req: authMiddleware({ req }) }),
+    persistedQueries: { cache: "bounded" }, // Enable bounded cache for persisted queries
 });
 
 // Start Apollo Server
