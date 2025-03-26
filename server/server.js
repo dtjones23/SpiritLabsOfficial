@@ -8,6 +8,7 @@ const { typeDefs, resolvers } = require('./schemas');
 const { authMiddleware } = require('./utils/auth');
 const helmet = require('helmet');
 const compression = require('compression');
+const fs = require('fs');
 // const depthLimit = require('graphql-depth-limit');
 // const { createComplexityLimitRule } = require('graphql-validation-complexity');
 
