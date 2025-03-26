@@ -12,6 +12,7 @@
     "render-build": "npm install && npm run seed && npm run build"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^7.6.0"
   },
   "keywords": [],

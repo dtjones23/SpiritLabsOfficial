@@ -82,11 +82,11 @@ const startServer = async () => {
     // Serve static assets in production
     if (process.env.NODE_ENV === 'production') {
         app.use(express.static(path.join(__dirname, '../client/dist'), {
-          maxAge: '1y',
-          immutable: true,
+        //   maxAge: '1y',
+        //   immutable: true,
         }));
 
-      app.get('*', (_req, res) => {
+      app.get('/*', (_req, res) => {
         res.sendFile(path.join(__dirname, '../client/dist/index.html'));
       });
     }
