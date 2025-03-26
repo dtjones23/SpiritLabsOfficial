@@ -81,14 +81,20 @@ const startServer = async () => {
 
     // Serve static assets in production
     if (process.env.NODE_ENV === 'production') {
-        app.use(express.static(path.join(__dirname, '../client/dist'), {
+        const staticPath = path.join(__dirname, '../client/dist');
+        app.use(express.static(staticPath, {
         //   maxAge: '1y',
         //   immutable: true,
         }));
 
-      app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-      });
+        app.get('*', (req, res) => {
+            const indexPath = path.join(staticPath, 'index.html');
+            if (fs.existsSync(indexPath)) {
+                res.sendFile(indexPath);
+            } else {
+                res.status(404).send('index.html not found');
+            }
+        });
     }
 
     app.listen(PORT, () => {
