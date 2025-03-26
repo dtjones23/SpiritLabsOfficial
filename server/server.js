@@ -86,7 +86,7 @@ const startServer = async () => {
         //   immutable: true,
         }));
 
-      app.get('/*', (_req, res) => {
+      app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, '../client/dist/index.html'));
       });
     }
