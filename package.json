@@ -7,9 +7,9 @@
     "start": "node server --ignore client",
     "develop": "concurrently \"cd server && npm run start\" \"cd client && npm run dev\"",
     "install": "cd server && npm i && cd ../client && npm i",
-    "seed": "cd server && npm run seed/seedDB.js",
+    "seed": "cd server && npm run seed",
     "build": "cd client && npm run build",
-    "render-build": "npm install && npm run seed/seedDB.js && npm run build"
+    "render-build": "npm install && npm run seed && npm run build"
   },
   "devDependencies": {
     "concurrently": "^7.6.0"
