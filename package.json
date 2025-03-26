@@ -9,7 +9,7 @@
     "install": "cd server && npm i && cd ../client && npm i",
     "seed": "cd server && npm run seed/seedDB.js",
     "build": "cd client && npm run build",
-    "render-build": "npm install && npm run seed && npm run build"
+    "render-build": "npm install && seed/seedDB.js && npm run build"
   },
   "devDependencies": {
     "concurrently": "^7.6.0"
