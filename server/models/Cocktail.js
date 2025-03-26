@@ -1,20 +1,77 @@
-const mongoose = require("../config/db");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const CocktailSchema = new mongoose.Schema({
+const IngredientSchema = new Schema({
   name: { type: String, required: true },
-  image: { type: String, required: true },
-  ingredients: {
-    alcohol: [{ name: { type: String }, amount: { type: String } }],
-    mixers: [{ name: { type: String }, amount: { type: String } }],
-    garnishes: [{ name: { type: String }, amount: { type: String } }]
-  },
-  assembly: { type: String, required: true },
-  ratings: [{ user: { type: mongoose.Schema.Types.ObjectId }, rating: { type: Number } }],
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
-  favoritesCount: { type: Number, default: 0 },
-  likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  amount: { type: String, required: true }
 });
 
+const CocktailSchema = new Schema({
+  name: { 
+    type: String, 
+    required: true,
+    trim: true,
+    index: true
+  },
+  image: {
+    type: String,
+    required: true,
+    default: './images/default-cocktail.webp',
+    validate: {
+      validator: function(v) {
+        return /^\.\/images\/.+\.(webp|jpg|jpeg|png)$/i.test(v);
+      },
+      message: props => `${props.value} is not a valid image path!`
+    }
+  },
+  ingredients: {
+    alcohol: [IngredientSchema],
+    mixers: [IngredientSchema],
+    garnishes: [IngredientSchema]
+  },
+  assembly: { 
+    type: String, 
+    required: true,
+    trim: true
+  },
+  ratings: [{ 
+    user: { type: Schema.Types.ObjectId, ref: 'User' }, 
+    rating: { type: Number, min: 1, max: 5 } 
+  }],
+  comments: [{ 
+    type: Schema.Types.ObjectId, 
+    ref: 'Comment' 
+  }],
+  favoritesCount: { 
+    type: Number, 
+    default: 0,
+    index: true
+  },
+  likedBy: [{ 
+    type: Schema.Types.ObjectId, 
+    ref: 'User',
+    index: true
+  }]
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
 
-module.exports = mongoose.model("Cocktail", CocktailSchema);
+// Indexes
+CocktailSchema.index({ createdAt: -1 });
+CocktailSchema.index({ name: 'text', 'ingredients.alcohol.name': 'text', 'ingredients.mixers.name': 'text' });
 
+// Virtual for average rating
+CocktailSchema.virtual('averageRating').get(function() {
+  if (this.ratings.length === 0) return 0;
+  const sum = this.ratings.reduce((acc, curr) => acc + curr.rating, 0);
+  return (sum / this.ratings.length).toFixed(1);
+});
+
+// Virtual for comments count
+CocktailSchema.virtual('commentsCount').get(function() {
+  return this.comments.length;
+});
+
+module.exports = mongoose.model('Cocktail', CocktailSchema);

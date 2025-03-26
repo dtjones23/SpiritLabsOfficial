@@ -1,19 +1,45 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/spiritlabsofficial', {
-    //   useNewUrlParser: true,
-    //   useUnifiedTopology: true,
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      maxPoolSize: 10,
     });
-    console.log("MongoDB connected successfully");
+    
+    console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+    
+    mongoose.connection.on('connected', () => {
+      console.log('Mongoose connected to DB');
+    });
+    
+    mongoose.connection.on('error', (err) => {
+      console.error('Mongoose connection error:', err);
+    });
+    
+    mongoose.connection.on('disconnected', () => {
+      console.warn('Mongoose disconnected from DB');
+    });
+    
+    return conn; // Return the connection object
+    
   } catch (error) {
-    console.error("MongoDB connection failed:", error);
+    console.error('❌ MongoDB connection failed:', error.message);
     process.exit(1);
   }
 };
 
-connectDB();
+// Graceful shutdown
+const gracefulShutdown = async (signal) => {
+  console.log(`Received ${signal}, closing MongoDB connection...`);
+  await mongoose.connection.close();
+  console.log('Mongoose connection closed due to app termination');
+  process.exit(0);
+};
 
-module.exports = mongoose;
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+
+module.exports = connectDB();

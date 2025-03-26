@@ -7,11 +7,10 @@ import DOTD from "../components/features/DOTD";
 
 export default function Home() {
   const [authOpen, setAuthOpen] = useState(false);
-  const { loggedIn, username } = useGlobalContext();
+  const { loggedIn, username, userId } = useGlobalContext();
 
   return (
     <main className="flex-1 p-1 h-full">
-      {/* Show login/signup button if not logged in */}
       {!loggedIn ? (
         <div className="flex justify-center mb-4">
           <button 
@@ -24,7 +23,11 @@ export default function Home() {
       ) : (
         <div className="flex justify-center mb-4">
           <h2 className="text-2xl font-semibold text-gray-900">
-            Welcome <span className="text-yellow-500 mx-2 text-3xl">{" "}{username}</span> to 
+            Welcome {username && (
+              <span className="text-yellow-500 mx-2 text-3xl">
+                {username}
+              </span>
+            )} to 
           </h2>
         </div>
       )}

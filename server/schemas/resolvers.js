@@ -44,17 +44,17 @@ const resolvers = {
     },
 
     login: async (_, { email, password }) => {
-      try {
-        const user = await User.findOne({ email });
-        if (!user) throw new AuthenticationError("User not found.");
-
-        const isValid = await user.isCorrectPassword(password);
-        if (!isValid) throw new AuthenticationError("Invalid email or password.");
-
-        return { token: signToken(user), user };
-      } catch (error) {
-        throw new Error(error.message);
+      const user = await User.findOne({ email }).select('+password');
+      if (!user) {
+        throw new AuthenticationError('Invalid credentials');
       }
+
+      const isValid = await user.comparePassword(password);
+      if (!isValid) {
+        throw new AuthenticationError('Invalid credentials');
+      }
+
+      return { token: signToken(user), user };
     },
 
     removeUser: async (_, { id }) => {

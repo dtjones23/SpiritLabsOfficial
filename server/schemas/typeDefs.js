@@ -6,18 +6,9 @@ const typeDefs = gql`
     username: String!
     email: String!
     favorites: [Cocktail]!
-  }
-
-  type Cocktail {
-    id: ID!
-    name: String!
-    image: String!
-    ingredients: Ingredients!
-    assembly: String!
-    ratings: [Rating]!
-    comments: [Comment]!
-    likedBy: [User!]!
     favoritesCount: Int!
+    createdAt: String!
+    updatedAt: String!
   }
 
   type Ingredient {
@@ -43,8 +34,28 @@ const typeDefs = gql`
     text: String!
     replies: [Comment!]!
     likes: [User!]!
+    likeCount: Int!
+    replyCount: Int!
+    createdAt: String!
+    updatedAt: String!
   }
 
+  type Cocktail {
+    id: ID!
+    name: String!
+    image: String!
+    ingredients: Ingredients!
+    assembly: String!
+    ratings: [Rating]!
+    comments: [Comment]!
+    likedBy: [User!]!
+    favoritesCount: Int!
+    commentsCount: Int!
+    averageRating: Float!
+    createdAt: String!
+    updatedAt: String!
+  }
+    
   type AuthPayload {
     token: ID!
     user: User!

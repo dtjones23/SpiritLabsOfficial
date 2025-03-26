@@ -18,106 +18,73 @@ export const GET_ALL_USERS = gql`
 export const GET_COCKTAILS = gql`
   query GetCocktails {
     getCocktails {
-      id
-      name
-      image
-      ingredients {
-        alcohol {
-          name
-          amount
-        }
-        mixers {
-          name
-          amount
-        }
-        garnishes {
-          name
-          amount
-        }
+    id
+    name
+    createdAt
+    image
+    ingredients {
+      alcohol {
+        amount
+        name
       }
-      assembly
-      ratings {
-        user {
-          id
-          username
-        }
-        rating
+      garnishes {
+        amount
+        name
       }
-      comments {
-        id
-        user {
-          id
-          username
-        }
-        text
-        replies {
-          id
-          text
-        }
-        likes {
-          id
-          username
-        }
-      }
-      likedBy {
-        id
-        username
+      mixers {
+        amount
+        name
       }
     }
+    favoritesCount
+    likedBy {
+      id
+      username
+    }
+    ratings {
+      rating
+      user {
+        id
+        username
+        createdAt
+        updatedAt
+      }
+    }
+    averageRating
+    assembly
+    commentsCount
+    comments {
+      id
+    }
+  }
   }
 `;
 
 export const GET_COCKTAIL = gql`
-  query GetCocktail($id: ID!) {
-    getCocktail(id: $id) {
-      id
-      name
-      image
-      ingredients {
-        alcohol {
-          name
-          amount
-        }
-        mixers {
-          name
-          amount
-        }
-        garnishes {
-          name
-          amount
-        }
+query GetCocktail($getCocktailId: ID!) {
+  getCocktail(id: $getCocktailId) {
+    name
+    assembly
+    createdAt
+    favoritesCount
+    id
+    image
+    ingredients {
+      alcohol {
+        amount
+        name
       }
-      assembly
-      ratings {
-        user {
-          id
-          username
-        }
-        rating
+      garnishes {
+        amount
+        name
       }
-      comments {
-        id
-        user {
-          id
-          username
-        }
-        text
-        replies {
-          id
-          text
-        }
-        likes {
-          id
-          username
-        }
-      }
-      likedBy {
-        id
-        username
+      mixers {
+        amount
+        name
       }
     }
   }
-`;
+}`;
 
 export const GET_USER = gql`
   query GetUser($id: ID!) {
