@@ -1,34 +1,26 @@
-require("dotenv").config();
-const mongoose = require("../config/db"); // This imports the already connected mongoose instance
-const Cocktail = require("../models/Cocktail");
-const fs = require("fs").promises;
-const path = require("path");
+const mongoose = require('mongoose');
+const { Cocktail } = require('../models');
+const formula = require('./formula.json');
+const cleanDB = require('./cleanDB');
+const { connectDB } = require('../config/connection');
 
-const seedDatabase = async () => {
+async function seedDatabase() {
   try {
-    // Read cocktail data from formula.json
-    const data = await fs.readFile(path.join(__dirname, "formula.json"), "utf-8");
-    const cocktails = JSON.parse(data);
-
-    console.log("Connected to MongoDB ✅");
-
-    // Clear existing cocktails
-    await Cocktail.deleteMany({});
-    console.log("Previous cocktail data removed ❌");
-
-    // Insert new cocktails
-    await Cocktail.insertMany(cocktails);
-    console.log(`${cocktails.length} cocktails seeded successfully! 🍹✅`);
-
-  } catch (error) {
-    console.error("Seeding error ❌:", error);
-    process.exit(1);
-  } finally {
-    // await mongoose.connection.close();
-    console.log("MongoDB connection closed 🔒");
+    // Connect to the database
+    const dbConnection = await connectDB();
+    
+    // Clean the existing data
+    await cleanDB('Cocktail', 'cocktails');
+    
+    // Insert new data
+    await Cocktail.insertMany(formula);
+    
+    console.log('✅ Database seeded successfully!');
     process.exit(0);
+  } catch (error) {
+    console.error('❌ Error seeding database:', error);
+    process.exit(1);
   }
-};
+}
 
-// Run the seeding function
 seedDatabase();

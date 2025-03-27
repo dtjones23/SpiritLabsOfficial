@@ -1,0 +1,19 @@
+// cleanDB.js
+const mongoose = require('mongoose');
+
+module.exports = async (modelName, collectionName) => {
+  try {
+    // Check if collection exists
+    const collections = await mongoose.connection.db.listCollections({ 
+      name: collectionName 
+    }).toArray();
+    
+    if (collections.length) {
+      await mongoose.connection.db.dropCollection(collectionName);
+      console.log(`🗑️ Dropped collection: ${collectionName}`);
+    }
+  } catch (err) {
+    console.error(`❌ Error cleaning collection ${collectionName}:`, err);
+    throw err;
+  }
+};
